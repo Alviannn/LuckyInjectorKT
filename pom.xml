@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>id.luckynetwork.alviann.injectorkt</groupId>
+    <artifactId>LuckyInjectorKT</artifactId>
+    <version>1.0</version>
+
+    <properties>
+        <kotlin.version>1.3.72</kotlin.version>
+        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+
+        <plugin.description>This plugin will inject the needed library to prevent big file size plugin</plugin.description>
+    </properties>
+
+    <developers>
+        <developer>
+            <name>Alvian</name>
+            <roles>
+                <role>author</role>
+                <role>maintainer</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <build>
+        <defaultGoal>clean package</defaultGoal>
+        <sourceDirectory>src/main/kotlin</sourceDirectory>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <jvmTarget>1.8</jvmTarget>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.3</version>
+
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <relocations>
+                        <!-- JetBrains and Kotlin Relocations -->
+                        <relocation>
+                            <pattern>kotlin</pattern>
+                            <shadedPattern>${project.groupId}.internal.kotlin</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.jetbrains</pattern>
+                            <shadedPattern>${project.groupId}.internal.jetbrains</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.intellij</pattern>
+                            <shadedPattern>${project.groupId}.internal.intellij</shadedPattern>
+                        </relocation>
+
+                        <!-- DependencyHelper Relocations -->
+                        <relocation>
+                            <pattern>com.github.alviannn.lib.dependencyhelper</pattern>
+                            <shadedPattern>${project.groupId}.internal.helper</shadedPattern>
+                        </relocation>
+
+                        <!-- Google Relocations -->
+                        <relocation>
+                            <pattern>com.google.gson</pattern>
+                            <shadedPattern>${project.groupId}.internal.google.gson</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.google.common</pattern>
+                            <shadedPattern>${project.groupId}.internal.google.common</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.google.errorprone.annotations</pattern>
+                            <shadedPattern>${project.groupId}.internal.google.errorprone.annotations</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.google.j2objc.annotations</pattern>
+                            <shadedPattern>${project.groupId}.internal.google.j2objc.annotations</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.google.thirdparty.publicsuffix</pattern>
+                            <shadedPattern>${project.groupId}.internal.google.thirdparty.publicsuffix</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.checkerframework</pattern>
+                            <shadedPattern>${project.groupId}.internal.checkerframework</shadedPattern>
+                        </relocation>
+
+                        <!-- OkHttp and Okio Relocations -->
+                        <relocation>
+                            <pattern>okhttp3</pattern>
+                            <shadedPattern>${project.groupId}.internal.okhttp3</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>okio</pattern>
+                            <shadedPattern>${project.groupId}.internal.okio</shadedPattern>
+                        </relocation>
+
+                        <!-- Apache Relocations -->
+                        <relocation>
+                            <pattern>org.apache</pattern>
+                            <shadedPattern>${project.groupId}.internal.apache</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <!-- Spigot repo -->
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <!-- Bungee-repo -->
+        <repository>
+            <id>sonatype-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+        <!-- jitpack repo -->
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- Kotlin -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- JetBrains Annotations -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>19.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Spigot API -->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.8.8-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- BungeeCord API -->
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>1.14-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Dependency Helper -->
+        <dependency>
+            <groupId>com.github.Alviannn</groupId>
+            <artifactId>DependencyHelper</artifactId>
+            <version>1.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- SQL Helper -->
+        <dependency>
+            <groupId>com.github.Alviannn</groupId>
+            <artifactId>SQLHelper</artifactId>
+            <version>2.5.6</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Cache2K All Cores -->
+        <dependency>
+            <groupId>org.cache2k</groupId>
+            <artifactId>cache2k-all</artifactId>
+            <version>1.2.4.Final</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Cache2K POM base -->
+        <dependency>
+            <groupId>org.cache2k</groupId>
+            <artifactId>cache2k-base-bom</artifactId>
+            <version>1.2.4.Final</version>
+            <type>pom</type>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- OkHttp3 - Http Library -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.7.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Apache IO Library -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.7</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Apache Codec Library -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.14</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Apache Language3 Library -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.10</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Apache Compress Library -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.20</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Apache Collections Library -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Apache Http Library -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.12</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Google Json (GSON) -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Google Guava (bunch of libraries) -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>29.0-jre</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+</project>

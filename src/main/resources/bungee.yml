@@ -1,0 +1,5 @@
+name: ${project.artifactId}
+version: ${project.version}
+author: Alviann
+main: ${project.groupId}.bungee.BungeeInjector
+description: ${plugin.description}
